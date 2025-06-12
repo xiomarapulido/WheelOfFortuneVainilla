@@ -145,13 +145,17 @@ button:hover:not(:disabled) {
 .form-message {
   text-align: center;
   margin-top: 10px;
+  color: #28a745;
 }
 
-.success-message {
-  color: green;
+.message-success {
+  color: #28a745;
 }
 
-.error-message {
-  color: red;
+.message-error {
+  color: #ff6600; 
 }
 
+.message-default {
+  color: #000; 
+}

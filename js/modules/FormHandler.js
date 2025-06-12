@@ -1,4 +1,5 @@
 import { MESSAGE_TYPE, MESSAGE_CLASS } from '../config/messageConfig.js';
+import { MESSAGE_TEXT } from '../config/messageText.js';
 
 export class FormHandler {
   constructor(container, greetingMessageElement, onLoginSuccessCallback) {
@@ -34,12 +35,12 @@ export class FormHandler {
     const { name, surname, email } = this.form;
 
     if (!name.value.trim() || !surname.value.trim() || !email.value.trim()) {
-      this.showMessage('Please fill all fields.', MESSAGE_TYPE.ERROR);
+      this.showMessage(MESSAGE_TEXT.FILL_ALL_FIELDS, MESSAGE_TYPE.ERROR);
       return false;
     }
 
     if (!this.validateEmail(email.value)) {
-      this.showMessage('Invalid email address.', MESSAGE_TYPE.ERROR);
+      this.showMessage(MESSAGE_TEXT.INVALID_EMAIL, MESSAGE_TYPE.ERROR);
       return false;
     }
 
@@ -55,7 +56,7 @@ export class FormHandler {
   handleUserLogin() {
     this.form.style.display = 'none';
     const name = this.form.name.value.trim();
-    this.greetingMessageElement.textContent = `Hello, ${name}! Welcome.`;
+    this.greetingMessageElement.textContent = MESSAGE_TEXT.WELCOME(name);
     this.setMessageClass(MESSAGE_TYPE.SUCCESS);
     this.onLoginSuccessCallback();
   }

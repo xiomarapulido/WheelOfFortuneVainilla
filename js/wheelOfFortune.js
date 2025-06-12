@@ -1,7 +1,8 @@
-// js/WheelOfFortune.js
 import { FormHandler } from './modules/FormHandler.js';
 import { WheelRenderer } from './modules/WheelRenderer.js';
 import { PrizeService } from './modules/PrizeService.js';
+import { MESSAGE_TEXT } from './config/messageText.js';
+import { MESSAGE_TYPE  } from './config/messageConfig.js';
 
 export class WheelOfFortune {
   constructor(appContainer) {
@@ -12,7 +13,6 @@ export class WheelOfFortune {
     this.isSpinning = false;
     this.prizeMessage = '';
 
-    // Create container elements once at the application start
     this.formSectionContainer = document.createElement('div');
     this.formSectionContainer.id = 'form-section';
     this.appContainer.appendChild(this.formSectionContainer);
@@ -27,7 +27,6 @@ export class WheelOfFortune {
     this.wheelSectionContainer.classList.add('wheel-container');
     this.appContainer.appendChild(this.wheelSectionContainer);
 
-    // Instantiate modules, passing the pre-existing container elements
     this.formHandler = new FormHandler(this.formSectionContainer, this.greetingMessageElement, this.handleUserLogin.bind(this));
     this.wheelRenderer = new WheelRenderer(
       this.wheelSectionContainer,
@@ -54,7 +53,7 @@ export class WheelOfFortune {
     this.formHandler.showForm();
     this.formHandler.resetForm();
 
-    this.wheelSectionContainer.style.display = 'none'; // Hide wheel container when form is visible
+    this.wheelSectionContainer.style.display = 'none';
 
     this.attemptsLeft = 2;
     this.isSpinning = false;
@@ -67,7 +66,7 @@ export class WheelOfFortune {
   }
 
   renderWheel() {
-    this.wheelSectionContainer.style.display = 'block'; // Show wheel container
+    this.wheelSectionContainer.style.display = 'block';
     this.wheelRenderer.render(this.attemptsLeft, this.isSpinning, this.prizeMessage);
   }
 
@@ -91,7 +90,7 @@ export class WheelOfFortune {
       this.wheelRenderer.updateSpinButton(this.attemptsLeft, this.isSpinning);
 
       if (this.attemptsLeft === 0) {
-        this.wheelRenderer.showProcessMessage('No more attempts. Thank you for playing!');
+        this.wheelRenderer.showProcessMessage(MESSAGE_TEXT.NO_ATTEMPTS_LEFT, MESSAGE_TYPE.SUCCESS);
       }
     });
   }
@@ -100,20 +99,20 @@ export class WheelOfFortune {
     return Math.floor(Math.random() * this.segments);
   }
 
-  handleSpinResult(segmentIndex) {
+ handleSpinResult(segmentIndex) {
     if (this.winningIndices.includes(segmentIndex)) {
       this.prizeService.fetchPrize()
         .then(prize => {
-          this.prizeMessage = `Congratulations! You won: ${prize}`;
-          this.wheelRenderer.showProcessMessage(this.prizeMessage, 'green');
+          this.prizeMessage = MESSAGE_TEXT.WINNING_PRIZE(prize);
+          this.wheelRenderer.showProcessMessage(this.prizeMessage, MESSAGE_TYPE.SUCCESS);
         })
         .catch(() => {
-          this.prizeMessage = 'You won! But could not retrieve prize info.';
-          this.wheelRenderer.showProcessMessage(this.prizeMessage, 'orange');
+          this.prizeMessage = MESSAGE_TEXT.PRIZE_FETCH_ERROR;
+          this.wheelRenderer.showProcessMessage(this.prizeMessage, MESSAGE_TYPE.ERROR);
         });
     } else {
-      this.prizeMessage = 'Try next time!';
-      this.wheelRenderer.showProcessMessage(this.prizeMessage);
+      this.prizeMessage = MESSAGE_TEXT.TRY_NEXT_TIME;
+      this.wheelRenderer.showProcessMessage(this.prizeMessage, MESSAGE_TYPE.ERROR);
     }
   }
 }

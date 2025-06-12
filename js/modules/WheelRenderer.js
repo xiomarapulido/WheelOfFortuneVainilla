@@ -1,4 +1,5 @@
-// js/modules/WheelRenderer.js
+import { MESSAGE_TYPE  } from '../config/messageConfig.js';
+
 export class WheelRenderer {
   constructor(container, segments, winningIndices, onSpinClick, onBackClick) {
     this.container = container;
@@ -13,7 +14,7 @@ export class WheelRenderer {
     this.arrowDiv = null;
   }
 
-  render(attemptsLeft, isSpinning, prizeMessage = '') {
+  render(attemptsLeft, isSpinning, prizeMessage = '', messageStatus = MESSAGE_TYPE.SUCCESS) {
     this.container.innerHTML = '';
     this.container.classList.add('wheel-container');
 
@@ -46,7 +47,7 @@ export class WheelRenderer {
       const largeArcFlag = segmentAngle > 180 ? 1 : 0;
       const d = `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
       path.setAttribute('d', d);
-      path.setAttribute('fill', i % 2 === 0 ? '#000' : '#fff');  // dinámico, no se puede poner en CSS
+      path.setAttribute('fill', i % 2 === 0 ? '#000' : '#fff');
       path.setAttribute('stroke', '#555');
       path.setAttribute('stroke-width', '1');
       svg.appendChild(path);
@@ -58,7 +59,7 @@ export class WheelRenderer {
       const text = document.createElementNS(svgNS, 'text');
       text.setAttribute('x', textX);
       text.setAttribute('y', textY);
-      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000');  // dinámico también
+      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000');
       text.classList.add('wheel-segment-text');
       text.textContent = this.winningIndices.includes(i) ? 'WIN' : 'Try Again';
       svg.appendChild(text);
@@ -89,7 +90,7 @@ export class WheelRenderer {
     this.container.appendChild(this.backLabel);
 
     if (prizeMessage) {
-      this.showProcessMessage(prizeMessage);
+      this.showProcessMessage(prizeMessage, messageStatus);
     }
   }
 
@@ -100,10 +101,24 @@ export class WheelRenderer {
     }
   }
 
-  showProcessMessage(msg, color = 'green') {
+  showProcessMessage(msg, status) {
     if (this.processMessageDiv) {
       this.processMessageDiv.textContent = msg;
-      this.processMessageDiv.style.color = color; // Color dinámico, no por clase
+
+      // Limpiar clases previas
+      this.processMessageDiv.classList.remove('message-success', 'message-error', 'message-default');
+
+      // Agregar clase según status
+      switch (status) {
+        case 'success':
+          this.processMessageDiv.classList.add('message-success');
+          break;
+        case 'error':
+          this.processMessageDiv.classList.add('message-error');
+          break;
+        default:
+          this.processMessageDiv.classList.add('message-default');
+      }
     }
   }
 

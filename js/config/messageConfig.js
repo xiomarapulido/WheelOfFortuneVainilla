@@ -1,6 +1,7 @@
 export const MESSAGE_TYPE = {
   SUCCESS: 'success',
   ERROR: 'error',
+  DEFAULT: 'default'
 };
 
 export const MESSAGE_CLASS = {
