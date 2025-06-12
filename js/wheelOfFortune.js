@@ -3,7 +3,7 @@ export class WheelOfFortune {
   constructor(container) {
     this.container = container;
     this.attemptsLeft = 2;
-    this.winningIndices = [0, 3, 6, 9]; // Posiciones ganadoras
+    this.winningIndices = [0, 3, 6, 9];
     this.segments = 12;
     this.isSpinning = false;
     this.prizeMessage = '';
@@ -16,15 +16,15 @@ export class WheelOfFortune {
 
   renderForm() {
     this.container.innerHTML = `
-      <h1 style="text-align:center; margin-bottom:20px;">Wheel of Fortune</h1>
+      <h1 style="text-align:center; margin-bottom:10px;">Wheel of Fortune</h1>
       <form id="userForm" novalidate>
         <input type="text" id="name" name="name" placeholder="Name" required />
         <input type="text" id="surname" name="surname" placeholder="Surname" required />
         <input type="email" id="email" name="email" placeholder="Email" required />
         <button type="submit">Start</button>
       </form>
-      <div id="greetingMessage" class="message"></div>
-      <div id="wheelContainer" class="wheel-container"></div>
+      <div id="greetingMessage" class="message" style="text-align:center; margin-top:10px;"></div>
+      <div id="wheelContainer" class="wheel-container" style="margin-top:20px;"></div>
     `;
     this.form = this.container.querySelector('#userForm');
     this.greetingMessage = this.container.querySelector('#greetingMessage');
@@ -44,16 +44,16 @@ export class WheelOfFortune {
     const email = this.form.email.value.trim();
 
     if (!name || !surname || !email) {
-      this.showMessage('Please fill all fields.', 'red');
+      this.showProcessMessage('Please fill all fields.', 'red');
       return false;
     }
 
     if (!this.validateEmail(email)) {
-      this.showMessage('Invalid email address.', 'red');
+      this.showProcessMessage('Invalid email address.', 'red');
       return false;
     }
 
-    this.showMessage('');
+    this.showProcessMessage('');
     return true;
   }
 
@@ -63,31 +63,25 @@ export class WheelOfFortune {
   }
 
   handleUserLogin() {
-    // Ocultar formulario, pero mantener el saludo
     this.form.style.display = 'none';
-
     const name = this.form.name.value.trim();
     this.greetingMessage.textContent = `Hola, ${name}! Bienvenido.`;
     this.greetingMessage.style.color = 'green';
-
     this.renderWheel();
   }
 
   renderWheel() {
-    // Limpiar contenido de ruleta
     this.wheelContainer.innerHTML = '';
 
-    // Flecha roja arriba (marcador)
-    const arrowDiv = document.createElement('div');
-    arrowDiv.classList.add('marker');
-    this.wheelContainer.appendChild(arrowDiv);
-
-    // Crear SVG ruleta blanco y negro
     const svgNS = "http://www.w3.org/2000/svg";
     const size = 300;
     const radius = size / 2 - 10;
     const center = size / 2;
     const segmentAngle = 360 / this.segments;
+
+    const arrowDiv = document.createElement('div');
+    arrowDiv.classList.add('marker');
+    this.wheelContainer.appendChild(arrowDiv);
 
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', size);
@@ -100,25 +94,18 @@ export class WheelOfFortune {
 
       const x1 = center + radius * Math.cos((startAngle * Math.PI) / 180);
       const y1 = center + radius * Math.sin((startAngle * Math.PI) / 180);
-
       const x2 = center + radius * Math.cos((endAngle * Math.PI) / 180);
       const y2 = center + radius * Math.sin((endAngle * Math.PI) / 180);
 
       const path = document.createElementNS(svgNS, 'path');
       const largeArcFlag = segmentAngle > 180 ? 1 : 0;
-      const d = 
-        `M ${center} ${center} 
-        L ${x1} ${y1} 
-        A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} 
-        Z`;
+      const d = `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
       path.setAttribute('d', d);
-      // Blanco y negro alternado
       path.setAttribute('fill', i % 2 === 0 ? '#000' : '#fff');
       path.setAttribute('stroke', '#555');
       path.setAttribute('stroke-width', '1');
       svg.appendChild(path);
 
-      // Texto pequeño y blanco
       const textAngle = startAngle + segmentAngle / 2;
       const textX = center + (radius / 1.7) * Math.cos((textAngle * Math.PI) / 180);
       const textY = center + (radius / 1.7) * Math.sin((textAngle * Math.PI) / 180);
@@ -126,7 +113,7 @@ export class WheelOfFortune {
       const text = document.createElementNS(svgNS, 'text');
       text.setAttribute('x', textX);
       text.setAttribute('y', textY);
-      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000'); // texto blanco sobre negro y negro sobre blanco para legibilidad
+      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000');
       text.setAttribute('font-size', '10');
       text.setAttribute('font-family', 'Arial, sans-serif');
       text.setAttribute('text-anchor', 'middle');
@@ -136,29 +123,17 @@ export class WheelOfFortune {
       svg.appendChild(text);
     }
 
-    // Puntero triángulo rojo arriba
     const pointer = document.createElementNS(svgNS, 'polygon');
     pointer.setAttribute('points', `${center - 10},10 ${center + 10},10 ${center},30`);
-    pointer.setAttribute('fill', 'red');
+    pointer.setAttribute('fill', 'transparent');
     svg.appendChild(pointer);
 
     this.wheelContainer.appendChild(svg);
     this.svgWheel = svg;
 
     this.renderSpinButton();
-
-    // Botón para volver al formulario **debajo** de la ruleta y mensaje
-    if (this.backBtn) this.backBtn.remove();
-    this.backBtn = document.createElement('button');
-    this.backBtn.textContent = 'Volver al formulario';
-    this.backBtn.style.marginTop = '15px';
-    this.backBtn.addEventListener('click', () => {
-      this.attemptsLeft = 2;
-      this.isSpinning = false;
-      this.prizeMessage = '';
-      this.renderForm();
-    });
-    this.wheelContainer.appendChild(this.backBtn);
+    this.renderProcessMessage();
+    this.renderBackLabel();
   }
 
   renderSpinButton() {
@@ -168,16 +143,51 @@ export class WheelOfFortune {
     this.spinBtn.classList.add('spin-button');
     this.spinBtn.textContent = `Spin (${this.attemptsLeft} left)`;
     this.spinBtn.disabled = this.isSpinning || this.attemptsLeft <= 0;
+    this.spinBtn.style.display = 'block';
+    this.spinBtn.style.margin = '10px auto';
     this.spinBtn.addEventListener('click', () => this.spin());
 
     this.wheelContainer.appendChild(this.spinBtn);
+  }
+
+  renderProcessMessage() {
+    if (this.processMessage) this.processMessage.remove();
+
+    this.processMessage = document.createElement('div');
+    this.processMessage.classList.add('message');
+    this.processMessage.style.margin = '10px 0';
+    this.processMessage.style.minHeight = '1.5em';
+    this.processMessage.style.textAlign = 'center';
+
+    // Insertar antes del botón
+    this.wheelContainer.insertBefore(this.processMessage, this.spinBtn);
+  }
+
+  renderBackLabel() {
+    if (this.backLabel) this.backLabel.remove();
+
+    this.backLabel = document.createElement('label');
+    this.backLabel.textContent = 'Volver al formulario';
+    this.backLabel.style.display = 'block';
+    this.backLabel.style.marginTop = '10px';
+    this.backLabel.style.textAlign = 'center';
+    this.backLabel.style.color = '#0078d7';
+    this.backLabel.style.cursor = 'pointer';
+    this.backLabel.addEventListener('click', () => {
+      this.attemptsLeft = 2;
+      this.isSpinning = false;
+      this.prizeMessage = '';
+      this.renderForm();
+    });
+
+    this.wheelContainer.appendChild(this.backLabel);
   }
 
   spin() {
     if (this.isSpinning || this.attemptsLeft <= 0) return;
     this.isSpinning = true;
     this.spinBtn.disabled = true;
-    this.showMessage('');
+    this.showProcessMessage('');
 
     const randomSegment = this.getRandomSegment();
     const segmentAngle = 360 / this.segments;
@@ -195,7 +205,7 @@ export class WheelOfFortune {
       this.renderSpinButton();
 
       if (this.attemptsLeft === 0) {
-        this.showMessage('No more attempts. Thank you for playing!');
+        this.showProcessMessage('No more attempts. Thank you for playing!');
       }
     }, { once: true });
   }
@@ -208,13 +218,13 @@ export class WheelOfFortune {
     if (this.winningIndices.includes(segmentIndex)) {
       this.fetchPrize()
         .then(prize => {
-          this.showMessage(`Congratulations! You won: ${prize}`);
+          this.showProcessMessage(`Congratulations! You won: ${prize}`);
         })
         .catch(() => {
-          this.showMessage('You won! But could not retrieve prize info.', 'orange');
+          this.showProcessMessage('You won! But could not retrieve prize info.', 'orange');
         });
     } else {
-      this.showMessage('Try next time!');
+      this.showProcessMessage('Try next time!');
     }
   }
 
@@ -231,5 +241,12 @@ export class WheelOfFortune {
   showMessage(msg, color = 'green') {
     this.greetingMessage.textContent = msg;
     this.greetingMessage.style.color = color;
+  }
+
+  showProcessMessage(msg, color = 'green') {
+    if (this.processMessage) {
+      this.processMessage.textContent = msg;
+      this.processMessage.style.color = color;
+    }
   }
 }

@@ -35,37 +35,46 @@ button {
   border: none;
   border-radius: 4px;
   color: white;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 button:disabled {
-  background: #999;
+  background: #aaa;
   cursor: not-allowed;
 }
 
 button:hover:not(:disabled) {
-  background-color: #005a9e;
+  background: #005a9e;
 }
 
 .wheel-container {
-  margin-top: 40px;
   position: relative;
-  width: 300px;
-  height: 300px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto;
+  width: 320px;
+  height: 350px;
 }
 
 .message {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
   min-height: 1.5em;
-  color: green;
 }
 
 .spin-button {
   margin-top: 10px;
+  padding: 12px 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  border: none;
+  background: #d17a00;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.spin-button:hover:enabled {
+  background: #b46300;
 }
 
 .marker {
@@ -79,13 +88,4 @@ button:hover:not(:disabled) {
   border-right: 12px solid transparent;
   border-top: 25px solid red;
   z-index: 10;
-}
-
-.arrow-down {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 25px solid #0078d7;
-  margin: 20px auto;
 }
