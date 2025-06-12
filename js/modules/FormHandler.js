@@ -1,4 +1,5 @@
-// js/modules/FormHandler.js
+import { MESSAGE_TYPE, MESSAGE_CLASS } from '../config/messageConfig.js';
+
 export class FormHandler {
   constructor(container, greetingMessageElement, onLoginSuccessCallback) {
     this.container = container;
@@ -9,7 +10,7 @@ export class FormHandler {
 
   render() {
     this.container.innerHTML = `
-      <h1 style="text-align:center; margin-bottom:10px;">Wheel of Fortune</h1>
+      <h1 class="form-title">Wheel of Fortune</h1>
       <form id="userForm" novalidate>
         <input type="text" id="name" name="name" placeholder="Name" required />
         <input type="text" id="surname" name="surname" placeholder="Surname" required />
@@ -17,9 +18,9 @@ export class FormHandler {
         <button type="submit">Start</button>
       </form>
     `;
+
     this.form = this.container.querySelector('#userForm');
-    this.greetingMessageElement.style.textAlign = 'center';
-    this.greetingMessageElement.style.marginTop = '10px';
+    this.greetingMessageElement.classList.add('form-message');
 
     this.form.addEventListener('submit', e => {
       e.preventDefault();
@@ -30,17 +31,15 @@ export class FormHandler {
   }
 
   validateForm() {
-    const name = this.form.name.value.trim();
-    const surname = this.form.surname.value.trim();
-    const email = this.form.email.value.trim();
+    const { name, surname, email } = this.form;
 
-    if (!name || !surname || !email) {
-      this.showMessage('Please fill all fields.', 'red');
+    if (!name.value.trim() || !surname.value.trim() || !email.value.trim()) {
+      this.showMessage('Please fill all fields.', MESSAGE_TYPE.ERROR);
       return false;
     }
 
-    if (!this.validateEmail(email)) {
-      this.showMessage('Invalid email address.', 'red');
+    if (!this.validateEmail(email.value)) {
+      this.showMessage('Invalid email address.', MESSAGE_TYPE.ERROR);
       return false;
     }
 
@@ -57,13 +56,23 @@ export class FormHandler {
     this.form.style.display = 'none';
     const name = this.form.name.value.trim();
     this.greetingMessageElement.textContent = `Hello, ${name}! Welcome.`;
-    this.greetingMessageElement.style.color = 'green';
+    this.setMessageClass(MESSAGE_TYPE.SUCCESS);
     this.onLoginSuccessCallback();
   }
 
-  showMessage(msg, color = 'green') {
-    this.greetingMessageElement.textContent = msg;
-    this.greetingMessageElement.style.color = color;
+  showMessage(message, type) {
+    this.greetingMessageElement.textContent = message;
+    this.setMessageClass(type);
+  }
+
+  setMessageClass(type) {
+    Object.values(MESSAGE_CLASS).forEach(cls =>
+      this.greetingMessageElement.classList.remove(cls)
+    );
+
+    if (type && MESSAGE_CLASS[type]) {
+      this.greetingMessageElement.classList.add(MESSAGE_CLASS[type]);
+    }
   }
 
   hideForm() {

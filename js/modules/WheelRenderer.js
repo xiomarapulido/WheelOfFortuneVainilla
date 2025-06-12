@@ -15,7 +15,7 @@ export class WheelRenderer {
 
   render(attemptsLeft, isSpinning, prizeMessage = '') {
     this.container.innerHTML = '';
-    this.container.style.marginTop = '20px';
+    this.container.classList.add('wheel-container');
 
     const svgNS = "http://www.w3.org/2000/svg";
     const size = 300;
@@ -30,7 +30,7 @@ export class WheelRenderer {
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('width', size);
     svg.setAttribute('height', size);
-    svg.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+    svg.classList.add('wheel-svg');
     this.svgWheel = svg;
 
     for (let i = 0; i < this.segments; i++) {
@@ -46,7 +46,7 @@ export class WheelRenderer {
       const largeArcFlag = segmentAngle > 180 ? 1 : 0;
       const d = `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
       path.setAttribute('d', d);
-      path.setAttribute('fill', i % 2 === 0 ? '#000' : '#fff');
+      path.setAttribute('fill', i % 2 === 0 ? '#000' : '#fff');  // dinámico, no se puede poner en CSS
       path.setAttribute('stroke', '#555');
       path.setAttribute('stroke-width', '1');
       svg.appendChild(path);
@@ -58,12 +58,8 @@ export class WheelRenderer {
       const text = document.createElementNS(svgNS, 'text');
       text.setAttribute('x', textX);
       text.setAttribute('y', textY);
-      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000');
-      text.setAttribute('font-size', '10');
-      text.setAttribute('font-family', 'Arial, sans-serif');
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('alignment-baseline', 'middle');
-      text.style.userSelect = 'none';
+      text.setAttribute('fill', i % 2 === 0 ? '#fff' : '#000');  // dinámico también
+      text.classList.add('wheel-segment-text');
       text.textContent = this.winningIndices.includes(i) ? 'WIN' : 'Try Again';
       svg.appendChild(text);
     }
@@ -76,28 +72,19 @@ export class WheelRenderer {
     this.container.appendChild(svg);
 
     this.processMessageDiv = document.createElement('div');
-    this.processMessageDiv.classList.add('message');
-    this.processMessageDiv.style.margin = '10px 0';
-    this.processMessageDiv.style.minHeight = '1.5em';
-    this.processMessageDiv.style.textAlign = 'center';
+    this.processMessageDiv.classList.add('process-message');
     this.container.appendChild(this.processMessageDiv);
 
     this.spinBtn = document.createElement('button');
     this.spinBtn.classList.add('spin-button');
     this.spinBtn.textContent = `Spin (${attemptsLeft} left)`;
     this.spinBtn.disabled = isSpinning || attemptsLeft <= 0;
-    this.spinBtn.style.display = 'block';
-    this.spinBtn.style.margin = '10px auto';
     this.spinBtn.addEventListener('click', this.onSpinClick);
     this.container.appendChild(this.spinBtn);
 
     this.backLabel = document.createElement('label');
     this.backLabel.textContent = 'Back to form';
-    this.backLabel.style.display = 'block';
-    this.backLabel.style.marginTop = '10px';
-    this.backLabel.style.textAlign = 'center';
-    this.backLabel.style.color = '#0078d7';
-    this.backLabel.style.cursor = 'pointer';
+    this.backLabel.classList.add('back-label');
     this.backLabel.addEventListener('click', this.onBackClick);
     this.container.appendChild(this.backLabel);
 
@@ -116,7 +103,7 @@ export class WheelRenderer {
   showProcessMessage(msg, color = 'green') {
     if (this.processMessageDiv) {
       this.processMessageDiv.textContent = msg;
-      this.processMessageDiv.style.color = color;
+      this.processMessageDiv.style.color = color; // Color dinámico, no por clase
     }
   }
 

@@ -89,3 +89,69 @@ button:hover:not(:disabled) {
   border-top: 25px solid red;
   z-index: 10;
 }
+.wheel-container {
+  margin-top: 20px;
+}
+
+.wheel-svg {
+  transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.wheel-segment-text {
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  text-anchor: middle;
+  alignment-baseline: middle;
+  user-select: none;
+}
+
+.process-message {
+  margin: 10px 0;
+  min-height: 1.5em;
+  text-align: center;
+}
+
+.spin-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  border: none;
+  background-color: #d17a00;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.spin-button:hover:enabled {
+  background-color: #b46300;
+}
+
+.back-label {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: #0078d7;
+  cursor: pointer;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-message {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+
