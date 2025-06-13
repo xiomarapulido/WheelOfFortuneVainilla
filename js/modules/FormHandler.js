@@ -8,9 +8,13 @@ export class FormHandler {
     this.greetingMessageElement = greetingMessageElement;
     this.onLoginSuccessCallback = onLoginSuccessCallback;
     this.form = null;
+
+    // Bind submit handler 
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
+    // Inject form HTML template
     this.container.innerHTML = `
       <h1 class="form-title">Wheel of Fortune</h1>
       <form id="userForm" novalidate>
@@ -24,26 +28,36 @@ export class FormHandler {
     this.form = this.container.querySelector('#userForm');
     this.greetingMessageElement.classList.add('form-message');
 
-    this.form.addEventListener('submit', e => {
-      e.preventDefault();
+    // Attach submit event listener
+    this.form.addEventListener('submit', this.handleSubmit);
+  }
 
-      const validationResult = validateForm(this.form);
+  handleSubmit(event) {
+    event.preventDefault();
 
-      if (!validationResult.valid) {
-        this.showMessage(validationResult.message, validationResult.type);
-        return;
-      }
+    // Validate form inputs
+    const validationResult = validateForm(this.form);
 
-      this.showMessage('');
-      this.handleUserLogin();
-    });
+    if (!validationResult.valid) {
+      this.showMessage(validationResult.message, validationResult.type);
+      return;
+    }
+
+    this.showMessage('');
+    this.handleUserLogin();
   }
 
   handleUserLogin() {
-    this.form.style.display = 'none';
+    // Hide form on successful login
+    this.hideForm();
+
+    // Get trimmed name input value
     const name = this.form.name.value.trim();
-    this.greetingMessageElement.textContent = MESSAGE_TEXT.WELCOME(name);
-    this.setMessageClass(MESSAGE_TYPE.SUCCESS);
+
+    // Show success welcome message
+    this.showMessage(MESSAGE_TEXT.WELCOME(name), MESSAGE_TYPE.SUCCESS);
+
+    // Trigger callback after login
     this.onLoginSuccessCallback();
   }
 
@@ -53,10 +67,12 @@ export class FormHandler {
   }
 
   setMessageClass(type) {
+    // Remove all existing message classes
     Object.values(MESSAGE_CLASS).forEach(cls =>
       this.greetingMessageElement.classList.remove(cls)
     );
 
+    // Add CSS class based on message type
     if (type && MESSAGE_CLASS[type]) {
       this.greetingMessageElement.classList.add(MESSAGE_CLASS[type]);
     }

@@ -25,7 +25,7 @@ input[type="email"] {
   width: calc(100% - 22px);
   margin-bottom: 10px;
   font-size: 1rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--color-disabled);
   border-radius: 6px;
   background-color: var(--color-white);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -85,11 +85,11 @@ button:hover:not(:disabled) {
 }
 
 .wheel-segment-dark .wheel-segment-text {
-  fill: #ffffff;
+  fill: var(--color-white);
 }
 
 .wheel-segment-light .wheel-segment-text {
-  fill: #111111;
+  fill: var(--color-black);
 }
 
 .spin-button {
