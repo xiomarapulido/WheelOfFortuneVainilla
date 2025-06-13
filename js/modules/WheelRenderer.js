@@ -14,7 +14,7 @@ export class WheelRenderer {
     this.arrowDiv = null;
   }
 
-  render(attemptsLeft, isSpinning, prizeMessage = '', messageStatus = MESSAGE_TYPE.SUCCESS) {
+  render(attemptsLeft, isSpinning, prizeMessage = '', messageStatus = '') {
     this.container.innerHTML = '';
     this.container.classList.add('wheel-container');
 
