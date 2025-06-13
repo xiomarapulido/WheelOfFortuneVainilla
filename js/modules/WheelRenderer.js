@@ -105,15 +105,13 @@ export class WheelRenderer {
     if (this.processMessageDiv) {
       this.processMessageDiv.textContent = msg;
 
-      // Limpiar clases previas
       this.processMessageDiv.classList.remove('message-success', 'message-error', 'message-default');
 
-      // Agregar clase según status
       switch (status) {
-        case 'success':
+        case MESSAGE_TYPE.SUCCESS:
           this.processMessageDiv.classList.add('message-success');
           break;
-        case 'error':
+        case MESSAGE_TYPE.ERROR:
           this.processMessageDiv.classList.add('message-error');
           break;
         default:
@@ -126,7 +124,7 @@ export class WheelRenderer {
     this.svgWheel.style.transition = 'none';
     this.svgWheel.style.transform = 'rotate(0deg)';
 
-    void this.svgWheel.offsetWidth; // Force reflow
+    void this.svgWheel.offsetWidth; 
 
     this.svgWheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
     this.svgWheel.style.transform = `rotate(${totalRotation}deg)`;

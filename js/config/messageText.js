@@ -6,5 +6,6 @@ export const MESSAGE_TEXT = {
   WINNING_PRIZE: prize => `Congratulations! You won: ${prize}`,
   PRIZE_FETCH_ERROR: 'You won! But could not retrieve prize info.',
   TRY_NEXT_TIME: 'Try next time!',
-  CHARACTERS: 'No special characters allowed in name or surname.'
+  CHARACTERS: 'No special characters allowed in name or surname.',
+  NETWORK_ERROR: 'Network response was not ok'
 };

@@ -2,7 +2,7 @@ import { FormHandler } from './modules/FormHandler.js';
 import { WheelRenderer } from './modules/WheelRenderer.js';
 import { PrizeService } from './modules/PrizeService.js';
 import { MESSAGE_TEXT } from './config/messageText.js';
-import { MESSAGE_TYPE  } from './config/messageConfig.js';
+import { MESSAGE_TYPE } from './config/messageConfig.js';
 
 export class WheelOfFortune {
   constructor(appContainer) {
@@ -77,29 +77,32 @@ export class WheelOfFortune {
     this.wheelRenderer.updateSpinButton(this.attemptsLeft, this.isSpinning);
     this.wheelRenderer.showProcessMessage('');
 
-    const randomSegment = this.getRandomSegment();
-    const segmentAngle = 360 / this.segments;
-    const rotations = 3;
-    const stopAngle = 360 - (randomSegment * segmentAngle) - segmentAngle / 2;
-    const totalRotation = rotations * 360 + stopAngle;
+    setTimeout(() => {
 
-    this.wheelRenderer.spinWheel(totalRotation, () => {
-      this.handleSpinResult(randomSegment);
-      this.isSpinning = false;
-      this.attemptsLeft--;
-      this.wheelRenderer.updateSpinButton(this.attemptsLeft, this.isSpinning);
+      const randomSegment = this.getRandomSegment();
+      const segmentAngle = 360 / this.segments;
+      const rotations = 3;
+      const stopAngle = 360 - (randomSegment * segmentAngle) - segmentAngle / 2;
+      const totalRotation = rotations * 360 + stopAngle;
 
-      if (this.attemptsLeft === 0) {
-        this.wheelRenderer.showProcessMessage(MESSAGE_TEXT.NO_ATTEMPTS_LEFT, MESSAGE_TYPE.SUCCESS);
-      }
-    });
+      this.wheelRenderer.spinWheel(totalRotation, () => {
+        this.handleSpinResult(randomSegment);
+        this.isSpinning = false;
+        this.attemptsLeft--;
+        this.wheelRenderer.updateSpinButton(this.attemptsLeft, this.isSpinning);
+
+        if (this.attemptsLeft === 0) {
+          this.wheelRenderer.showProcessMessage(MESSAGE_TEXT.NO_ATTEMPTS_LEFT, MESSAGE_TYPE.SUCCESS);
+        }
+      });
+    }, 1000);
   }
 
   getRandomSegment() {
     return Math.floor(Math.random() * this.segments);
   }
 
- handleSpinResult(segmentIndex) {
+  handleSpinResult(segmentIndex) {
     if (this.winningIndices.includes(segmentIndex)) {
       this.prizeService.fetchPrize()
         .then(prize => {
