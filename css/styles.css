@@ -1,9 +1,11 @@
+@import './colors.css';
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 20px;
-  background: #fafafa;
-  color: #333;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 #app {
@@ -23,58 +25,38 @@ input[type="email"] {
   width: calc(100% - 22px);
   margin-bottom: 10px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-disabled);
+  border-radius: 6px;
+  background-color: var(--color-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 button {
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  background: #0078d7;
+  background: var(--color-primary);
   border: none;
-  border-radius: 4px;
-  color: white;
-  transition: background 0.3s ease;
+  border-radius: 6px;
+  color: var(--color-white);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:disabled {
-  background: #aaa;
+  background: var(--color-disabled);
   cursor: not-allowed;
 }
 
 button:hover:not(:disabled) {
-  background: #005a9e;
+  background: var(--color-primary-hover);
 }
 
 .wheel-container {
   position: relative;
-  margin: 20px auto;
+  margin: 20px auto 0;
   width: 320px;
   height: 350px;
-}
-
-.message {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  min-height: 1.5em;
-}
-
-.spin-button {
-  margin-top: 10px;
-  padding: 12px 30px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  border: none;
-  background: #d17a00;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.spin-button:hover:enabled {
-  background: #b46300;
 }
 
 .marker {
@@ -86,11 +68,8 @@ button:hover:not(:disabled) {
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 25px solid red;
+  border-top: 25px solid var(--color-marker);
   z-index: 10;
-}
-.wheel-container {
-  margin-top: 20px;
 }
 
 .wheel-svg {
@@ -98,64 +77,71 @@ button:hover:not(:disabled) {
 }
 
 .wheel-segment-text {
-  font-size: 10px;
-  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-family: 'Segoe UI', sans-serif;
   text-anchor: middle;
   alignment-baseline: middle;
   user-select: none;
 }
 
-.process-message {
-  margin: 10px 0;
-  min-height: 1.5em;
-  text-align: center;
+.wheel-segment-dark .wheel-segment-text {
+  fill: var(--color-white);
+}
+
+.wheel-segment-light .wheel-segment-text {
+  fill: var(--color-black);
 }
 
 .spin-button {
   display: block;
   margin: 10px auto;
-  padding: 10px 30px;
+  padding: 12px 32px;
   font-weight: bold;
   font-size: 1.1rem;
-  border-radius: 25px;
+  border-radius: 30px;
   border: none;
-  background-color: #d17a00;
-  color: white;
+  background-color: var(--color-spin-bg);
+  color: var(--color-white);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .spin-button:hover:enabled {
-  background-color: #b46300;
+  background-color: var(--color-spin-bg-hover);
+  transform: scale(1.03);
 }
 
 .back-label {
   display: block;
   margin-top: 10px;
   text-align: center;
-  color: #0078d7;
+  color: var(--color-primary);
   cursor: pointer;
 }
 
 .form-title {
   text-align: center;
   margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--color-primary);
 }
 
 .form-message {
   text-align: center;
   margin-top: 10px;
-  color: #28a745;
+  color: var(--color-alert);
 }
 
 .message-success {
-  color: #28a745;
+  color: var(--color-success);
 }
 
 .message-error {
-  color: #ff6600; 
+  color: var(--color-error);
 }
 
 .message-default {
-  color: #000; 
+  color: var(--color-black);
 }

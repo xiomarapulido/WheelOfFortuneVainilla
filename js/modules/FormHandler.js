@@ -1,5 +1,6 @@
 import { MESSAGE_TYPE, MESSAGE_CLASS } from '../config/messageConfig.js';
 import { MESSAGE_TEXT } from '../config/messageText.js';
+import { validateForm } from '../validators/formValidation.js';
 
 export class FormHandler {
   constructor(container, greetingMessageElement, onLoginSuccessCallback) {
@@ -7,9 +8,13 @@ export class FormHandler {
     this.greetingMessageElement = greetingMessageElement;
     this.onLoginSuccessCallback = onLoginSuccessCallback;
     this.form = null;
+
+    // Bind submit handler 
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
+    // Inject form HTML template
     this.container.innerHTML = `
       <h1 class="form-title">Wheel of Fortune</h1>
       <form id="userForm" novalidate>
@@ -23,41 +28,36 @@ export class FormHandler {
     this.form = this.container.querySelector('#userForm');
     this.greetingMessageElement.classList.add('form-message');
 
-    this.form.addEventListener('submit', e => {
-      e.preventDefault();
-      if (this.validateForm()) {
-        this.handleUserLogin();
-      }
-    });
+    // Attach submit event listener
+    this.form.addEventListener('submit', this.handleSubmit);
   }
 
-  validateForm() {
-    const { name, surname, email } = this.form;
+  handleSubmit(event) {
+    event.preventDefault();
 
-    if (!name.value.trim() || !surname.value.trim() || !email.value.trim()) {
-      this.showMessage(MESSAGE_TEXT.FILL_ALL_FIELDS, MESSAGE_TYPE.ERROR);
-      return false;
-    }
+    // Validate form inputs
+    const validationResult = validateForm(this.form);
 
-    if (!this.validateEmail(email.value)) {
-      this.showMessage(MESSAGE_TEXT.INVALID_EMAIL, MESSAGE_TYPE.ERROR);
-      return false;
+    if (!validationResult.valid) {
+      this.showMessage(validationResult.message, validationResult.type);
+      return;
     }
 
     this.showMessage('');
-    return true;
-  }
-
-  validateEmail(email) {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    this.handleUserLogin();
   }
 
   handleUserLogin() {
-    this.form.style.display = 'none';
+    // Hide form on successful login
+    this.hideForm();
+
+    // Get trimmed name input value
     const name = this.form.name.value.trim();
-    this.greetingMessageElement.textContent = MESSAGE_TEXT.WELCOME(name);
-    this.setMessageClass(MESSAGE_TYPE.SUCCESS);
+
+    // Show success welcome message
+    this.showMessage(MESSAGE_TEXT.WELCOME(name), MESSAGE_TYPE.SUCCESS);
+
+    // Trigger callback after login
     this.onLoginSuccessCallback();
   }
 
@@ -67,10 +67,12 @@ export class FormHandler {
   }
 
   setMessageClass(type) {
+    // Remove all existing message classes
     Object.values(MESSAGE_CLASS).forEach(cls =>
       this.greetingMessageElement.classList.remove(cls)
     );
 
+    // Add CSS class based on message type
     if (type && MESSAGE_CLASS[type]) {
       this.greetingMessageElement.classList.add(MESSAGE_CLASS[type]);
     }
