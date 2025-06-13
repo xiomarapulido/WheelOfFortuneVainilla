@@ -1,5 +1,6 @@
 import { MESSAGE_TYPE, MESSAGE_CLASS } from '../config/messageConfig.js';
 import { MESSAGE_TEXT } from '../config/messageText.js';
+import { validateForm } from '../validators/formValidation.js';
 
 export class FormHandler {
   constructor(container, greetingMessageElement, onLoginSuccessCallback) {
@@ -25,32 +26,17 @@ export class FormHandler {
 
     this.form.addEventListener('submit', e => {
       e.preventDefault();
-      if (this.validateForm()) {
-        this.handleUserLogin();
+
+      const validationResult = validateForm(this.form);
+
+      if (!validationResult.valid) {
+        this.showMessage(validationResult.message, validationResult.type);
+        return;
       }
+
+      this.showMessage('');
+      this.handleUserLogin();
     });
-  }
-
-  validateForm() {
-    const { name, surname, email } = this.form;
-
-    if (!name.value.trim() || !surname.value.trim() || !email.value.trim()) {
-      this.showMessage(MESSAGE_TEXT.FILL_ALL_FIELDS, MESSAGE_TYPE.ERROR);
-      return false;
-    }
-
-    if (!this.validateEmail(email.value)) {
-      this.showMessage(MESSAGE_TEXT.INVALID_EMAIL, MESSAGE_TYPE.ERROR);
-      return false;
-    }
-
-    this.showMessage('');
-    return true;
-  }
-
-  validateEmail(email) {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
   }
 
   handleUserLogin() {
