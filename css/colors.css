@@ -1,0 +1,15 @@
+:root {
+  --color-bg: #f5f7fa;
+  --color-text: #2c3e50;
+  --color-primary: #1d4ed8;
+  --color-primary-hover: #2563eb;
+  --color-disabled: #9ca3af;
+  --color-spin-bg: #f59e0b;
+  --color-spin-bg-hover: #b45309;
+  --color-marker: #ef4444;
+  --color-stroke: #6b7280;
+  --color-success: #16a34a;
+  --color-error: #ea580c;
+  --color-black: #111827;
+  --color-white: #ffffff;
+}

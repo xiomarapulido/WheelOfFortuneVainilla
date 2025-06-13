@@ -1,9 +1,11 @@
+@import './colors.css';
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background: #fafafa;
-  color: #333;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 #app {
@@ -31,50 +33,27 @@ button {
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  background: #0078d7;
+  background: var(--color-primary);
   border: none;
   border-radius: 4px;
-  color: white;
+  color: var(--color-white);
   transition: background 0.3s ease;
 }
 
 button:disabled {
-  background: #aaa;
+  background: var(--color-disabled);
   cursor: not-allowed;
 }
 
 button:hover:not(:disabled) {
-  background: #005a9e;
+  background: var(--color-primary-hover);
 }
 
 .wheel-container {
   position: relative;
-  margin: 20px auto;
+  margin: 20px auto 0;
   width: 320px;
   height: 350px;
-}
-
-.message {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  min-height: 1.5em;
-}
-
-.spin-button {
-  margin-top: 10px;
-  padding: 12px 30px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  border-radius: 25px;
-  border: none;
-  background: #d17a00;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.spin-button:hover:enabled {
-  background: #b46300;
 }
 
 .marker {
@@ -86,11 +65,8 @@ button:hover:not(:disabled) {
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 25px solid red;
+  border-top: 25px solid var(--color-marker);
   z-index: 10;
-}
-.wheel-container {
-  margin-top: 20px;
 }
 
 .wheel-svg {
@@ -119,21 +95,21 @@ button:hover:not(:disabled) {
   font-size: 1.1rem;
   border-radius: 25px;
   border: none;
-  background-color: #d17a00;
-  color: white;
+  background-color: var(--color-spin-bg);
+  color: var(--color-white);
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .spin-button:hover:enabled {
-  background-color: #b46300;
+  background-color: var(--color-spin-bg-hover);
 }
 
 .back-label {
   display: block;
   margin-top: 10px;
   text-align: center;
-  color: #0078d7;
+  color: var(--color-primary);
   cursor: pointer;
 }
 
@@ -145,17 +121,17 @@ button:hover:not(:disabled) {
 .form-message {
   text-align: center;
   margin-top: 10px;
-  color: #28a745;
+  color: var(--color-success);
 }
 
 .message-success {
-  color: #28a745;
+  color: var(--color-success);
 }
 
 .message-error {
-  color: #ff6600; 
+  color: var(--color-error);
 }
 
 .message-default {
-  color: #000; 
+  color: var(--color-black);
 }
